@@ -11,7 +11,7 @@
 .container{width:min(900px,calc(100% - 32px));margin:auto}.top{padding:42px 0 24px}.creator{font-size:12px;color:#8f9bb3;margin-top:5px;letter-spacing:.03em}.brand{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800}.hero h1{font-size:clamp(34px,7vw,64px);line-height:1.02;margin:10px 0 14px}.hero p{font-size:18px;color:var(--muted);max-width:720px}.pill{display:inline-flex;padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;margin-top:8px}
 .card{background:rgba(18,26,46,.88);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 18px 60px rgba(0,0,0,.22);backdrop-filter:blur(8px)}.notice{font-size:14px;color:var(--muted);margin-bottom:22px}.notice strong{color:var(--text)}
 .progress-wrap{margin:18px 0 26px}.progress-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:8px}.progress{height:8px;background:#202b45;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
-.question-number{color:var(--accent);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.question{font-size:clamp(22px,4vw,31px);line-height:1.2;margin:8px 0 8px}.instruction{color:var(--muted);margin:0 0 22px}.answers{display:grid;gap:12px}.answer{position:relative}.answer input{position:absolute;opacity:0}.answer label{display:block;padding:17px 18px;border:1px solid var(--line);border-radius:16px;background:#10182b;cursor:pointer;transition:.18s}.answer label:hover{border-color:#5574a9;transform:translateY(-1px)}.answer input:checked+label{border-color:var(--accent);background:#172746;box-shadow:0 0 0 2px rgba(115,167,255,.12)}.answer .tag{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.question-number{color:var(--accent);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.question{font-size:clamp(22px,4vw,31px);line-height:1.2;margin:8px 0 8px}.instruction{color:var(--muted);margin:0 0 22px}.explain{margin-top:18px}.explain label{display:block;font-size:13px;font-weight:700;color:#cbd5e8;margin-bottom:7px}.explain textarea{width:100%;min-height:88px;resize:vertical;border:1px solid var(--line);border-radius:14px;background:#0e1628;color:var(--text);padding:13px 14px;font:inherit;outline:none}.explain textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(115,167,255,.10)}.explain textarea::placeholder{color:#69758d}.answers{display:grid;gap:12px}.answer{position:relative}.answer input{position:absolute;opacity:0}.answer label{display:block;padding:17px 18px;border:1px solid var(--line);border-radius:16px;background:#10182b;cursor:pointer;transition:.18s}.answer label:hover{border-color:#5574a9;transform:translateY(-1px)}.answer input:checked+label{border-color:var(--accent);background:#172746;box-shadow:0 0 0 2px rgba(115,167,255,.12)}.answer .tag{display:block;color:var(--muted);font-size:12px;margin-top:4px}
 .actions{display:flex;gap:10px;justify-content:space-between;margin-top:24px}.btn{border:0;border-radius:13px;padding:13px 18px;font-weight:800;font-size:15px;cursor:pointer}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white}.btn.secondary{background:#202b45;color:var(--text)}.btn:disabled{opacity:.4;cursor:not-allowed}
 .hidden{display:none!important}.result h2{font-size:clamp(30px,6vw,48px);line-height:1.05;margin:8px 0 12px}.subtitle{font-size:19px;color:#dce5f5}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:20px 0}.box{background:#0e1628;border:1px solid var(--line);border-radius:16px;padding:18px}.box h3{margin:0 0 8px;font-size:16px}.box p{margin:0;color:var(--muted)}.bar{margin:12px 0}.barhead{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}.track{height:7px;background:#202b45;border-radius:99px;overflow:hidden;margin-top:5px}.track i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
 ul{color:var(--muted);padding-left:20px}.summary{white-space:pre-wrap;background:#0b1222;border:1px solid var(--line);border-radius:16px;padding:18px;color:#dfe7f5}.small{font-size:12px;color:var(--muted)}footer{padding:30px 0 50px;color:#75819a;font-size:12px}
@@ -158,21 +158,31 @@ function render(){
    const label=document.createElement("label");label.htmlFor=input.id;label.textContent=txt;
    wrap.append(input,label);box.append(wrap);
  });
+ const explain=document.createElement("div");
+ explain.className="explain";
+ explain.innerHTML=`<label for="explanation">Tu veux préciser ta réponse ? <span style="font-weight:400;color:var(--muted)">(facultatif)</span></label><textarea id="explanation" maxlength="800" placeholder="Tu peux expliquer pourquoi, donner un exemple ou préciser dans quel contexte ta réponse change."></textarea>`;
+ box.append(explain);
+ const savedNote=(answers[idx]&&typeof answers[idx]==="object"&&!Array.isArray(answers[idx]))?answers[idx].note:"";
+ if(savedNote) document.getElementById("explanation").value=savedNote;
  $("back").disabled=idx===0;
  $("next").textContent=idx===Q.length-1?"Voir ma synthèse":"Suivant";
 }
 function getCurrent(){
  const inputs=[...document.querySelectorAll('#answers input')];
- if(idx===41||idx===43)return inputs.filter(x=>x.checked).map(x=>+x.value);
- const x=inputs.find(x=>x.checked);return x?+x.value:null;
+ const note=(document.getElementById("explanation")?.value||"").trim();
+ let choice;
+ if(idx===41||idx===43) choice=inputs.filter(x=>x.checked).map(x=>+x.value);
+ else {const x=inputs.find(x=>x.checked);choice=x?+x.value:null;}
+ return {choice,note};
 }
 function scores(){
  const s={};Object.keys(dims).forEach(k=>s[k]=50);
  const add=(d,v)=>s[d]=Math.max(0,Math.min(100,s[d]+v));
  answers.forEach((ans,qi)=>{
    if(ans==null)return;
+   const choice=(typeof ans==="object"&&!Array.isArray(ans))?ans.choice:ans;
    const opts=Q[qi].slice(1,-1), map=Q[qi][Q[qi].length-1];
-   const vals=Array.isArray(ans)?ans:[ans];
+   const vals=Array.isArray(choice)?choice:[choice];
    vals.forEach(a=>{
      const text=opts[a]||"";
      map.forEach((d,j)=>{
@@ -217,13 +227,15 @@ function buildResult(){
  $("environment").textContent=s.autonomy>67?"Un environnement avec des objectifs clairs, une vraie latitude d’exécution, des problèmes intéressants et des collègues capables de travailler de façon autonome.":s.social>67?"Un environnement humain, collaboratif et suffisamment dynamique pour garder les échanges stimulants.":"Un environnement où les attentes sont claires, les outils fiables et les responsabilités bien définies, avec assez de liberté pour faire du bon travail.";
  $("motivation").textContent=`Tes moteurs les plus visibles sont ${listText(s,true).join(", ")}. Tu sembles particulièrement sensible à la combinaison entre progression personnelle et utilité réelle. La reconnaissance peut renforcer ta motivation, mais elle n’a pas nécessairement besoin d’être le moteur principal.`;
  $("growth").textContent=s.autonomy>67&&s.rigor>67?"Ton levier est de distinguer ce qui mérite réellement d’être optimisé de ce qui peut simplement fonctionner. Tout n’a pas besoin de devenir un système parfait.":s.initiative>67&&s.analysis>67?"Ton levier est de fixer un seuil d’information suffisant avant d’agir. Une bonne décision prise à 80 % peut parfois battre une décision parfaite prise trop tard.":s.empathy>67?"Ton levier est de préserver tes propres priorités tout en restant attentif aux besoins des autres. Aider n’implique pas toujours de porter le problème à leur place.":"Ton levier est d’identifier les situations où ton instinct d’adaptation est un avantage et celles où une structure plus stable te ferait gagner de l’énergie.";
- window._summary=`PROFIL 360\n\n${title}\n${sub}\n\nDimensions dominantes : ${strengths.join(", ")}.\nPoints de vigilance : ${lows.join(", ")}.\n\nDécision : ${decision}\n\nEnvironnement idéal : ${$("environment").textContent}\n\nMotivation : ${$("motivation").textContent}\n\nProgression : ${$("growth").textContent}`;
+ const notes=answers.map((a,i)=>({i,note:(a&&typeof a==="object"&&!Array.isArray(a))?a.note:""})).filter(x=>x.note);
+ const notesText=notes.length?"\n\nPRÉCISIONS DE LA PERSONNE\n"+notes.map(x=>`Question ${x.i+1}: ${x.note}`).join("\n"):"";
+ window._summary=`PROFIL 360\n\n${title}\n${sub}\n\nDimensions dominantes : ${strengths.join(", ")}.\nPoints de vigilance : ${lows.join(", ")}.\n\nDécision : ${decision}\n\nEnvironnement idéal : ${$("environment").textContent}\n\nMotivation : ${$("motivation").textContent}\n\nProgression : ${$("growth").textContent}${notesText}`;
 }
 $("start").onclick=()=>{$("intro").classList.add("hidden");$("test").classList.remove("hidden");render();window.scrollTo(0,0)};
 $("back").onclick=()=>{if(idx>0){answers[idx]=getCurrent();idx--;render();window.scrollTo(0,0)}};
 $("next").onclick=()=>{
  const val=getCurrent();
- if(val===null || (Array.isArray(val)&&val.length===0)){alert("Choisis au moins une réponse avant de continuer.");return}
+ if(val.choice===null || (Array.isArray(val.choice)&&val.choice.length===0)){alert("Choisis au moins une réponse avant de continuer.");return}
  answers[idx]=val;
  if(idx<Q.length-1){idx++;render();window.scrollTo(0,0)}else{$("test").classList.add("hidden");$("result").classList.remove("hidden");buildResult();window.scrollTo(0,0)}
 };
