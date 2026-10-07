@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Profil 360, questionnaire de réflexion personnelle sur le style de fonctionnement, les motivations et les préférences de travail.">
+<title>Profil 360</title>
+<style>
+:root{--bg:#0b1020;--card:#121a2e;--card2:#18223b;--text:#f4f7fb;--muted:#aeb8cc;--line:#2a3654;--accent:#73a7ff;--accent2:#9b7cff;--good:#63d6a0;--warn:#ffd166}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 20% 0%,#17264a 0,#0b1020 42%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+.container{width:min(900px,calc(100% - 32px));margin:auto}.top{padding:42px 0 24px}.creator{font-size:12px;color:#8f9bb3;margin-top:5px;letter-spacing:.03em}.brand{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800}.hero h1{font-size:clamp(34px,7vw,64px);line-height:1.02;margin:10px 0 14px}.hero p{font-size:18px;color:var(--muted);max-width:720px}.pill{display:inline-flex;padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;margin-top:8px}
+.card{background:rgba(18,26,46,.88);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 18px 60px rgba(0,0,0,.22);backdrop-filter:blur(8px)}.notice{font-size:14px;color:var(--muted);margin-bottom:22px}.notice strong{color:var(--text)}
+.progress-wrap{margin:18px 0 26px}.progress-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:8px}.progress{height:8px;background:#202b45;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+.question-number{color:var(--accent);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.question{font-size:clamp(22px,4vw,31px);line-height:1.2;margin:8px 0 8px}.instruction{color:var(--muted);margin:0 0 22px}.answers{display:grid;gap:12px}.answer{position:relative}.answer input{position:absolute;opacity:0}.answer label{display:block;padding:17px 18px;border:1px solid var(--line);border-radius:16px;background:#10182b;cursor:pointer;transition:.18s}.answer label:hover{border-color:#5574a9;transform:translateY(-1px)}.answer input:checked+label{border-color:var(--accent);background:#172746;box-shadow:0 0 0 2px rgba(115,167,255,.12)}.answer .tag{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.actions{display:flex;gap:10px;justify-content:space-between;margin-top:24px}.btn{border:0;border-radius:13px;padding:13px 18px;font-weight:800;font-size:15px;cursor:pointer}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white}.btn.secondary{background:#202b45;color:var(--text)}.btn:disabled{opacity:.4;cursor:not-allowed}
+.hidden{display:none!important}.result h2{font-size:clamp(30px,6vw,48px);line-height:1.05;margin:8px 0 12px}.subtitle{font-size:19px;color:#dce5f5}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:20px 0}.box{background:#0e1628;border:1px solid var(--line);border-radius:16px;padding:18px}.box h3{margin:0 0 8px;font-size:16px}.box p{margin:0;color:var(--muted)}.bar{margin:12px 0}.barhead{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}.track{height:7px;background:#202b45;border-radius:99px;overflow:hidden;margin-top:5px}.track i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+ul{color:var(--muted);padding-left:20px}.summary{white-space:pre-wrap;background:#0b1222;border:1px solid var(--line);border-radius:16px;padding:18px;color:#dfe7f5}.small{font-size:12px;color:var(--muted)}footer{padding:30px 0 50px;color:#75819a;font-size:12px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.card{padding:18px}.actions .btn{flex:1}.hero p{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header class="top hero">
+<div class="brand">Profil 360</div>
+<div class="creator">Créé par Louiguens</div>
+<h1>Comprendre comment tu fonctionnes.</h1>
+<p>Un questionnaire de réflexion sur ton style de décision, ton autonomie, ta façon de travailler, tes motivations et ton rapport aux autres.</p>
+<div class="pill">≈ 8 à 12 minutes · réponses traitées localement</div>
+</header>
+
+<main>
+<section id="intro" class="card">
+<div class="notice"><strong>Confidentialité :</strong> tes réponses restent dans ton navigateur. Elles ne sont pas envoyées à un serveur par cette version. Le résultat peut être copié et partagé, mais les réponses brutes restent privées.</div>
+<button class="btn primary" id="start">Commencer le Profil 360</button>
+</section>
+
+<section id="test" class="card hidden">
+<div class="progress-wrap">
+<div class="progress-meta"><span id="count">Question 1 sur 45</span><span id="pct">2 %</span></div>
+<div class="progress"><i id="progress"></i></div>
+</div>
+<div class="question-number" id="qnum"></div>
+<h2 class="question" id="qtext"></h2>
+<p class="instruction" id="qhelp"></p>
+<div class="answers" id="answers"></div>
+<div class="actions">
+<button class="btn secondary" id="back">Retour</button>
+<button class="btn primary" id="next">Suivant</button>
+</div>
+</section>
+
+<section id="result" class="card result hidden">
+<div class="brand">Ton résultat</div>
+<div class="creator">Créé par Louiguens</div>
+<h2 id="title"></h2>
+<p class="subtitle" id="subtitle"></p>
+<div id="dimensions"></div>
+<div class="grid">
+<div class="box"><h3>Ce qui te caractérise</h3><ul id="strengths"></ul></div>
+<div class="box"><h3>Points de vigilance</h3><ul id="blind"></ul></div>
+<div class="box"><h3>Ta manière de décider</h3><p id="decision"></p></div>
+<div class="box"><h3>Ton environnement idéal</h3><p id="environment"></p></div>
+</div>
+<div class="box"><h3>Ce qui te motive</h3><p id="motivation"></p></div>
+<div class="box" style="margin-top:14px"><h3>Ton levier de progression</h3><p id="growth"></p></div>
+<div style="margin-top:18px">
+<button class="btn primary" id="copy">Copier ma synthèse</button>
+<button class="btn secondary" id="share">Partager ma synthèse</button>
+<button class="btn secondary" id="restart">Recommencer</button>
+</div>
+<p class="small" style="margin-top:18px">Profil 360 est un outil de réflexion personnelle. Ce n’est ni un diagnostic psychologique ni le Predictive Index officiel.</p>
+<div class="summary hidden" id="copyPreview"></div>
+</section>
+</main>
+<footer>Profil 360 · version locale · aucune réponse brute n’est transmise par cette page.</footer>
+</div>
+
+<script>
+const Q=[
+["Quand un objectif est clair mais que la méthode ne l’est pas, tu préfères…","Choisir toi-même la méthode","Suivre une méthode déjà éprouvée","Ça dépend du contexte",["initiative","adaptability","rigor"]],
+["Face à un problème complexe, ton premier réflexe est de…","Analyser pour comprendre ce qui se passe","Échanger avec quelqu’un pour faire émerger des idées","Ça dépend de la situation",["analysis","social"]],
+["Quand une décision importante doit être prise rapidement…","Tu décides avec les informations disponibles","Tu préfères obtenir davantage d’informations","Ça dépend de l’enjeu",["initiative","analysis"]],
+["Dans une équipe, tu es plus à l’aise quand…","Tu as une vraie marge de manœuvre","Le fonctionnement collectif est bien défini","Ça dépend de l’équipe",["autonomy","stability"]],
+["Quand quelqu’un te donne une consigne que tu trouves inefficace…","Tu proposes ou construis une meilleure façon de faire","Tu appliques d’abord la consigne telle quelle","Ça dépend des contraintes",["autonomy","initiative","rigor"]],
+["Tu apprends surtout en…","Essayant, expérimentant et corrigeant","Observant, étudiant et comprenant d’abord","Les deux",["adaptability","mastery","analysis"]],
+["Quand un projet change au dernier moment…","Tu t’adaptes et réorganises","Tu préfères revenir à un plan stable","Ça dépend de l’ampleur du changement",["adaptability","stability"]],
+["Au travail, tu préfères généralement…","Des objectifs clairs avec liberté d’exécution","Un cadre précis avec des étapes définies","Un mélange des deux",["autonomy","rigor"]],
+["Quand tu maîtrises quelque chose…","Tu cherches naturellement à l’améliorer","Tu préfères continuer à l’utiliser efficacement","Ça dépend de ton intérêt",["mastery","initiative"]],
+["Lors d’un désaccord…","Tu défends clairement ton point de vue","Tu cherches d’abord à préserver l’harmonie","Ça dépend de l’enjeu",["initiative","empathy"]],
+["Quand tu arrives dans un nouvel environnement…","Tu observes puis trouves rapidement tes repères","Tu préfères qu’on t’explique clairement comment ça fonctionne","Ça dépend du contexte",["adaptability","social"]],
+["Ce qui te satisfait le plus dans un travail réussi…","Avoir construit quelque chose de solide","Savoir que les autres en sont satisfaits","Les deux",["mastery","impact"]],
+["Si tu vois une amélioration évidente à apporter…","Tu as tendance à la mettre en place","Tu attends qu’elle soit demandée ou validée","Ça dépend de ton rôle",["initiative","autonomy"]],
+["Quand plusieurs solutions sont possibles…","Tu compares et choisis celle qui te paraît la plus pertinente","Tu privilégies la solution la plus sûre ou éprouvée","Ça dépend des risques",["analysis","stability"]],
+["Tu préfères être reconnu pour…","Ta compétence et la qualité de ton travail","Ta capacité à faire avancer les gens","Les deux",["mastery","social","impact"]],
+["Quand quelqu’un vient te demander de l’aide…","Tu cherches à résoudre le problème avec lui","Tu lui expliques surtout comment le résoudre lui-même","Les deux",["empathy","mastery"]],
+["Une journée de travail idéale contient…","Des problèmes intéressants à résoudre","Des échanges et de la collaboration","Un équilibre des deux",["challenge","social"]],
+["Quand une règle semble inutile…","Tu cherches pourquoi elle existe et si elle peut évoluer","Tu la respectes parce qu’elle fait partie du système","Ça dépend de la règle",["analysis","autonomy","rigor"]],
+["Face à l’incertitude…","Tu peux avancer malgré elle","Tu préfères réduire l’incertitude avant d’agir","Ça dépend du niveau de risque",["initiative","stability"]],
+["Quand tu reçois une critique…","Tu analyses ce qui peut réellement t’être utile","Tu es d’abord sensible à la manière dont elle est formulée","Les deux comptent",["analysis","empathy"]],
+["Pour rester motivé sur la durée, tu as besoin de…","Sentir que tu progresses","Sentir que ce que tu fais a une utilité réelle","Les deux",["mastery","impact"]],
+["Quand quelqu’un est moins compétent que toi sur un sujet…","Tu prends volontiers le relais si nécessaire","Tu préfères l’aider à monter en compétence","Ça dépend de la situation",["initiative","mastery","empathy"]],
+["Tu préfères un projet…","Ambitieux mais avec une part d’incertitude","Prévisible et bien cadré","Ça dépend du potentiel",["challenge","stability"]],
+["Quand tu dois organiser quelque chose…","Tu construis ton propre système","Tu utilises volontiers un système déjà établi","Ça dépend de l’efficacité",["initiative","rigor","autonomy"]],
+["Dans une discussion, tu es plutôt…","Direct quand le sujet l’exige","Diplomate pour garder une bonne dynamique","Je peux être les deux",["initiative","empathy"]],
+["Quand tu as beaucoup de travail…","Tu priorises et attaques ce qui compte le plus","Tu avances méthodiquement tâche par tâche","Ça dépend de l’urgence",["initiative","rigor"]],
+["Si ton supérieur te demande quelque chose avec lequel tu n’es pas d’accord…","Tu expliques ton point de vue et proposes une alternative","Tu exécutes sauf si c’est vraiment problématique","Ça dépend du sujet",["autonomy","initiative"]],
+["Tu préfères travailler avec des personnes qui…","Sont autonomes et compétentes","Sont très collaboratives et communicatives","Les deux",["autonomy","social"]],
+["Ce qui t’épuise le plus…","Le micro-management et les contraintes inutiles","Le chaos, l’improvisation permanente et le manque de structure","Ça dépend de la durée",["autonomy","stability","rigor"]],
+["Quand tu commences un nouveau projet…","Tu veux rapidement comprendre le résultat recherché","Tu veux d’abord comprendre toutes les étapes","Ça dépend de la complexité",["initiative","analysis"]],
+["Tu es plus à l’aise avec…","Un problème sans solution évidente","Une tâche avec une méthode clairement définie","Ça dépend du temps disponible",["challenge","stability"]],
+["Quand tu as une idée…","Tu as envie de la tester rapidement","Tu veux d’abord la développer davantage","Ça dépend du coût d’un essai",["initiative","analysis"]],
+["Dans une équipe, tu prends naturellement le rôle de…","Celui qui débloque et fait avancer","Celui qui structure et sécurise","Ça dépend des besoins",["initiative","rigor"]],
+["Quand le résultat compte vraiment…","Tu acceptes de modifier le plan en cours de route","Tu préfères respecter le plan pour garder le contrôle","Ça dépend des conséquences",["adaptability","stability"]],
+["Tu préfères recevoir des objectifs…","Ambitieux, avec liberté sur le chemin","Très précis, avec des attentes détaillées","Ça dépend du projet",["autonomy","challenge"]],
+["Quand tu rencontres une personne très différente de toi…","Tu es curieux de comprendre sa façon de penser","Tu préfères d’abord trouver un terrain commun","Les deux",["social","empathy"]],
+["Pour toi, être professionnel signifie surtout…","Être fiable et produire un travail de qualité","Être agréable, respectueux et facile à travailler avec","Les deux",["rigor","empathy"]],
+["Quand un système fonctionne mais pourrait être meilleur…","Tu as envie de l’optimiser","Tu préfères ne pas le changer sans raison forte","Ça dépend du gain attendu",["mastery","initiative","analysis"]],
+["Si tu dois choisir entre vitesse et perfection…","Tu privilégies la vitesse quand elle permet d’avancer","Tu privilégies la qualité quand elle protège le résultat","Ça dépend du coût d’une erreur",["initiative","rigor"]],
+["Ce qui te donne le plus envie de t’investir dans un projet…","Apprendre quelque chose de difficile","Créer un résultat qui compte vraiment","Les deux",["mastery","impact"]],
+["Quand tu atteins un objectif important…","Tu penses déjà au prochain niveau","Tu prends le temps de consolider ce que tu as accompli","Ça dépend de l’objectif",["challenge","stability"]],
+["Si tu étais financièrement libre, tu chercherais surtout à…","Maîtriser des domaines qui t’intéressent","Créer quelque chose d’utile","Avoir de l’impact","Être reconnu pour ton travail",["mastery","impact","recognition"]],
+["Une opportunité très intéressante exige de renoncer à beaucoup d’autonomie. Tu…","Acceptes si le projet en vaut vraiment la peine","Refuses parce que l’autonomie est essentielle","Négocies pour trouver un meilleur équilibre",["autonomy","impact","adaptability"]],
+["La satisfaction la plus profonde vient pour toi de…","Avoir compris quelque chose de complexe","Avoir construit quelque chose","Avoir aidé quelqu’un à avancer","Avoir obtenu une reconnaissance importante","Avoir eu la liberté de faire les choses à ta manière",["analysis","mastery","empathy","recognition","autonomy"]],
+["Entre une voie sûre et une voie incertaine mais prometteuse…","Tu prends la voie sûre","Tu prends la voie incertaine","Tu cherches une troisième option qui réduit le risque sans tuer le potentiel",["stability","challenge","adaptability"]]
+];
+
+const dims={
+autonomy:["Autonomie","Tu fonctionnes mieux quand tu peux choisir le comment, pas seulement exécuter le quoi."],
+analysis:["Analyse","Tu cherches à comprendre les mécanismes avant de te satisfaire d’une réponse superficielle."],
+adaptability:["Adaptabilité","Tu peux changer de plan sans perdre le fil lorsque le contexte l’exige."],
+social:["Aisance sociale","Tu peux utiliser les échanges comme un outil de travail et de compréhension."],
+rigor:["Rigueur","Tu accordes de l’importance à la qualité, à la cohérence et à la fiabilité."],
+empathy:["Empathie","Tu tiens compte de l’humain, de la manière dont les choses sont reçues et vécues."],
+stability:["Stabilité","Tu apprécies la prévisibilité, la structure et la réduction des risques inutiles."],
+initiative:["Initiative","Tu as tendance à agir plutôt qu’à attendre qu’une solution apparaisse toute seule."],
+challenge:["Défi","La difficulté peut devenir un moteur lorsqu’elle représente un vrai potentiel de progression."],
+mastery:["Maîtrise","Comprendre, progresser et devenir meilleur dans un domaine te nourrit durablement."],
+recognition:["Reconnaissance","La qualité du travail compte, mais le fait qu’elle soit vue peut aussi avoir du poids."],
+impact:["Impact","Tu veux que ce que tu fais produise un résultat qui dépasse la simple exécution."]
+};
+
+let answers=Array(Q.length).fill(null),idx=0;
+const $=id=>document.getElementById(id);
+function render(){
+ const q=Q[idx], multi=(idx===41||idx===43);
+ $("qnum").textContent=`Question ${idx+1}`;
+ $("qtext").textContent=q[0];
+ $("qhelp").textContent=multi?"Tu peux sélectionner plusieurs réponses.":(idx===42||idx===44?"Choisis la réponse qui correspond le mieux à ta manière de fonctionner.":"Choisis ce qui te ressemble le plus. Si aucune option ne gagne clairement, choisis « Ça dépend / Les deux ».");
+ $("count").textContent=`Question ${idx+1} sur ${Q.length}`;
+ const pct=Math.round((idx+1)/Q.length*100);$("pct").textContent=pct+" %";$("progress").style.width=pct+"%";
+ const box=$("answers");box.innerHTML="";
+ const opts=q.slice(1,-1);
+ opts.forEach((txt,i)=>{
+   const wrap=document.createElement("div");wrap.className="answer";
+   const input=document.createElement("input");input.type=multi?"checkbox":"radio";input.name="answer";input.value=i;input.id=`a${idx}_${i}`;
+   if(multi && Array.isArray(answers[idx]) && answers[idx].includes(i)) input.checked=true;
+   if(!multi && answers[idx]===i) input.checked=true;
+   const label=document.createElement("label");label.htmlFor=input.id;label.textContent=txt;
+   wrap.append(input,label);box.append(wrap);
+ });
+ $("back").disabled=idx===0;
+ $("next").textContent=idx===Q.length-1?"Voir ma synthèse":"Suivant";
+}
+function getCurrent(){
+ const inputs=[...document.querySelectorAll('#answers input')];
+ if(idx===41||idx===43)return inputs.filter(x=>x.checked).map(x=>+x.value);
+ const x=inputs.find(x=>x.checked);return x?+x.value:null;
+}
+function scores(){
+ const s={};Object.keys(dims).forEach(k=>s[k]=50);
+ const add=(d,v)=>s[d]=Math.max(0,Math.min(100,s[d]+v));
+ answers.forEach((ans,qi)=>{
+   if(ans==null)return;
+   const opts=Q[qi].slice(1,-1), map=Q[qi][Q[qi].length-1];
+   const vals=Array.isArray(ans)?ans:[ans];
+   vals.forEach(a=>{
+     const text=opts[a]||"";
+     map.forEach((d,j)=>{
+       const seed=((qi+1)*(j+3))%7;
+       let delta=0;
+       if(a===0) delta=6+(seed%3);
+       else if(a===1) delta=-(4+(seed%3));
+       else delta=1;
+       if(/Ça dépend|Les deux|Négocies|troisième option/i.test(text)) delta=2;
+       add(d,delta);
+     });
+   });
+ });
+ return s;
+}
+function classify(s){
+ const top=k=>Object.entries(s).sort((a,b)=>b[1]-a[1]).slice(0,k).map(x=>x[0]);
+ const t=top(4);
+ if(s.autonomy>=68&&s.analysis>=65&&s.mastery>=65) return ["Architecte autonome","Tu combines besoin de liberté, goût de la compréhension et recherche de maîtrise. Tu veux pouvoir comprendre le système, choisir une approche et produire un résultat dont tu peux être fier.","architect"];
+ if(s.initiative>=68&&s.adaptability>=67&&s.challenge>=62) return ["Catalyseur adaptable","Tu es à ton meilleur quand il faut débloquer une situation, improviser intelligemment et transformer un problème en mouvement.","catalyst"];
+ if(s.empathy>=68&&s.social>=65&&s.impact>=62) return ["Connecteur d’impact","Tu combines compréhension des personnes, aisance relationnelle et envie de produire quelque chose d’utile.","connector"];
+ if(s.rigor>=68&&s.analysis>=64&&s.stability>=62) return ["Bâtisseur méthodique","Tu recherches la solidité, la cohérence et la fiabilité. Tu préfères que les choses tiennent debout plutôt qu’elles aient simplement l’air de fonctionner.","builder"];
+ if(s.challenge>=68&&s.mastery>=65) return ["Explorateur de maîtrise","Tu te nourris de difficulté utile. Apprendre, comprendre et repousser ton niveau de compétence sont des moteurs puissants.","explorer"];
+ return ["Profil adaptatif","Tu sembles fonctionner par ajustement intelligent : tu ne cherches pas une règle universelle, tu cherches la bonne réponse pour le bon contexte.","adaptive"];
+}
+function listText(s,high=true){
+ const entries=Object.entries(s).sort((a,b)=>high?b[1]-a[1]:a[1]-b[1]).slice(0,3);
+ return entries.map(([k])=>dims[k][0]);
+}
+function buildResult(){
+ const s=scores(), [title,sub]=classify(s);
+ $("title").textContent=title;$("subtitle").textContent=sub;
+ const d=$("dimensions");d.innerHTML="<h3>Ta carte de fonctionnement</h3>";
+ Object.entries(s).sort((a,b)=>b[1]-a[1]).slice(0,8).forEach(([k,v])=>{
+   const [name]=dims[k];d.insertAdjacentHTML("beforeend",`<div class="bar"><div class="barhead"><span>${name}</span><span>${Math.round(v)}%</span></div><div class="track"><i style="width:${v}%"></i></div></div>`);
+ });
+ const strengths=listText(s,true), lows=listText(s,false);
+ $("strengths").innerHTML=strengths.map(x=>`<li>${x}</li>`).join("");
+ $("blind").innerHTML=lows.map(x=>`<li>${x}</li>`).join("");
+ const decision=s.analysis>65&&s.initiative>65?"Tu analyses, puis tu avances. Tu n’as pas besoin de certitude absolue pour décider, mais tu veux comprendre suffisamment le terrain pour agir intelligemment.":s.stability>68?"Tu privilégies une décision robuste et maîtrisée, surtout lorsque les conséquences sont importantes.":"Tu ajustes ton niveau d’analyse au contexte. L’enjeu, le temps disponible et les conséquences changent ta façon de décider.";
+ $("decision").textContent=decision;
+ $("environment").textContent=s.autonomy>67?"Un environnement avec des objectifs clairs, une vraie latitude d’exécution, des problèmes intéressants et des collègues capables de travailler de façon autonome.":s.social>67?"Un environnement humain, collaboratif et suffisamment dynamique pour garder les échanges stimulants.":"Un environnement où les attentes sont claires, les outils fiables et les responsabilités bien définies, avec assez de liberté pour faire du bon travail.";
+ $("motivation").textContent=`Tes moteurs les plus visibles sont ${listText(s,true).join(", ")}. Tu sembles particulièrement sensible à la combinaison entre progression personnelle et utilité réelle. La reconnaissance peut renforcer ta motivation, mais elle n’a pas nécessairement besoin d’être le moteur principal.`;
+ $("growth").textContent=s.autonomy>67&&s.rigor>67?"Ton levier est de distinguer ce qui mérite réellement d’être optimisé de ce qui peut simplement fonctionner. Tout n’a pas besoin de devenir un système parfait.":s.initiative>67&&s.analysis>67?"Ton levier est de fixer un seuil d’information suffisant avant d’agir. Une bonne décision prise à 80 % peut parfois battre une décision parfaite prise trop tard.":s.empathy>67?"Ton levier est de préserver tes propres priorités tout en restant attentif aux besoins des autres. Aider n’implique pas toujours de porter le problème à leur place.":"Ton levier est d’identifier les situations où ton instinct d’adaptation est un avantage et celles où une structure plus stable te ferait gagner de l’énergie.";
+ window._summary=`PROFIL 360\n\n${title}\n${sub}\n\nDimensions dominantes : ${strengths.join(", ")}.\nPoints de vigilance : ${lows.join(", ")}.\n\nDécision : ${decision}\n\nEnvironnement idéal : ${$("environment").textContent}\n\nMotivation : ${$("motivation").textContent}\n\nProgression : ${$("growth").textContent}`;
+}
+$("start").onclick=()=>{$("intro").classList.add("hidden");$("test").classList.remove("hidden");render();window.scrollTo(0,0)};
+$("back").onclick=()=>{if(idx>0){answers[idx]=getCurrent();idx--;render();window.scrollTo(0,0)}};
+$("next").onclick=()=>{
+ const val=getCurrent();
+ if(val===null || (Array.isArray(val)&&val.length===0)){alert("Choisis au moins une réponse avant de continuer.");return}
+ answers[idx]=val;
+ if(idx<Q.length-1){idx++;render();window.scrollTo(0,0)}else{$("test").classList.add("hidden");$("result").classList.remove("hidden");buildResult();window.scrollTo(0,0)}
+};
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText(window._summary);$("copy").textContent="Synthèse copiée ✓";setTimeout(()=>$("copy").textContent="Copier ma synthèse",1800)}catch(e){$("copyPreview").textContent=window._summary;$("copyPreview").classList.remove("hidden")}};
+
+$("share").onclick=async()=>{
+ const shareData={
+   title:"Mon Profil 360",
+   text:window._summary
+ };
+ try{
+   if(navigator.share){
+     await navigator.share(shareData);
+   }else{
+     await navigator.clipboard.writeText(window._summary);
+     $("share").textContent="Synthèse copiée ✓";
+     setTimeout(()=>$("share").textContent="Partager ma synthèse",1800);
+   }
+ }catch(e){
+   if(e && e.name==="AbortError") return;
+   try{
+     await navigator.clipboard.writeText(window._summary);
+     $("share").textContent="Synthèse copiée ✓";
+     setTimeout(()=>$("share").textContent="Partager ma synthèse",1800);
+   }catch(err){
+     $("copyPreview").textContent=window._summary;
+     $("copyPreview").classList.remove("hidden");
+   }
+ }
+};
+
+$("restart").onclick=()=>{answers=Array(Q.length).fill(null);idx=0;$("result").classList.add("hidden");$("test").classList.remove("hidden");render();window.scrollTo(0,0)};
+</script>
+</body>
+</html>
